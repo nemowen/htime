@@ -1,14 +1,15 @@
 package models
 
 import (
+	"time"
+
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
-	"time"
 )
 
 // 数据库初始化
 func init() {
-	orm.RegisterModel(new(Topic), new(User))
+	orm.RegisterModel(new(Topic), new(User), new(Category))
 	orm.RegisterDriver("mysql", orm.DR_MySQL)
 	orm.RegisterDataBase("default", "mysql", "root:wenbin@/htime?charset=utf8", 10, 100)
 	orm.Debug = true
@@ -40,6 +41,8 @@ type User struct {
 
 type Category struct {
 	Id          int64
-	Name        string //分类名称
-	TopicNumber int64  // 文章数量
+	Name        string    // 分类名称
+	TopicNumber int64     // 文章数量
+	CreateTIme  time.Time // 创建时间
+
 }

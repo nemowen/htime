@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		{{template "admin/base/head.html" .}}
+		{{define "meta"}}
+		<title>htime.me for happy time! 快乐的时光!</title>
+		{{end}}
+	</head>
+	
+	<body>
+		<h1>h.time for happy time! 快乐的时光!</h1>
+		
+		<div class="ui form segment">
+			<div class="field">
+			  <label>用户名</label>
+			  <div class="ui left labeled icon input">
+			      <input type="text" placeholder="用户名">
+			      <i class="user icon"></i>
+			      <div class="ui corner label">
+			          <i class="icon asterisk"></i>
+			      </div>
+			  </div>
+			</div>
+			<div class="field">
+			  <label>密码</label>
+			  <div class="ui left labeled icon input">
+			      <input type="password">
+			      <i class="lock icon"></i>
+			      <div class="ui corner label">
+			          <i class="icon asterisk"></i>
+			      </div>
+			  </div>
+			</div>
+			<div class="ui error message">
+			  <div class="header">发生了错误</div>
+			</div>
+  		  <div class="ui blue submit button">登录</div>
+        </div>
+	</body>
+	
+</html>
