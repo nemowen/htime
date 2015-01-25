@@ -22,8 +22,11 @@ var (
 	ErrUserAlreadExist = errors.New("User alread exist")
 )
 
+// Find user with id
 func GetUserById(id int64) (*User, error) {
 	user := new(User)
+
+	// id conditon
 	b, err := orm.Where("id=?", id).Get(user)
 	if err != nil {
 		return nil, err
@@ -33,6 +36,7 @@ func GetUserById(id int64) (*User, error) {
 	return user, nil
 }
 
+// Find user with username
 func GetUserByUsername(username string) (*User, error) {
 	if len(username) == 0 {
 		return nil, ErrParameter
@@ -48,6 +52,7 @@ func GetUserByUsername(username string) (*User, error) {
 	return user, nil
 }
 
+// Find user with e-mail address
 func GetUserByEmail(email string) (*User, error) {
 	if len(email) == 0 {
 		return nil, ErrParameter
@@ -63,14 +68,16 @@ func GetUserByEmail(email string) (*User, error) {
 	return user, nil
 }
 
-func IsUserExist(username string) (b bool, err error) {
+// Check user whether or not exist on db with the username
+func IsUserExist(username string) (bool, error) {
 	if len(username) == 0 {
 		return false, ErrParameter
 	}
 	return orm.Get(&User{Username: username})
 }
 
-func CreateUser(u *User) (id int64, err error) {
+// Save user entity
+func CreateUser(u *User) (int64, error) {
 	b, err := IsUserExist(u.Username)
 	if err != nil {
 		return -1, err
