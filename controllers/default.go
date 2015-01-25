@@ -7,8 +7,8 @@ type MainController struct {
 }
 
 func (this *MainController) Get() {
-	this.Data["Website"] = "beego.me"
-	this.Data["Email"] = "astaxie@gmail.com"
-	this.TplNames = "index.tpl"
+	this.Data["Website"] = "htime.me"
+	this.Data["Email"] = "nemowen@gmail.com"
+	this.TplNames = "index.html"
 
 }

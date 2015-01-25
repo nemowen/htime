@@ -7,35 +7,76 @@
 		{{end}}
 	</head>
 	
-	<body>
-		<h1>h.time for happy time! 快乐的时光!</h1>
+	<body class="login">
 		
-		<div class="ui form segment">
-			<div class="field">
-			  <label>用户名</label>
-			  <div class="ui left labeled icon input">
-			      <input type="text" placeholder="用户名">
-			      <i class="user icon"></i>
-			      <div class="ui corner label">
-			          <i class="icon asterisk"></i>
-			      </div>
-			  </div>
-			</div>
-			<div class="field">
-			  <label>密码</label>
-			  <div class="ui left labeled icon input">
-			      <input type="password">
-			      <i class="lock icon"></i>
-			      <div class="ui corner label">
-			          <i class="icon asterisk"></i>
-			      </div>
-			  </div>
-			</div>
-			<div class="ui error message">
-			  <div class="header">发生了错误</div>
-			</div>
-  		  <div class="ui blue submit button">登录</div>
-        </div>
+		<div class="form-signin">
+	      <div class="text-center">
+	        <h1>h.time</h1>
+	      </div>
+	      <hr>
+	      <div class="tab-content">
+	        <div id="login" class="tab-pane {{if .LoginActive}}active{{end}}">
+	          <form action="/login" method="post">
+	            <p class="text-muted text-center">
+	              Enter your username and password
+					{{.ErrorMessage}}
+	            </p>
+	            <input type="text" name="username" placeholder="Username" value="{{.username}}" class="form-control top">
+	            <input type="password" name="password" placeholder="Password" class="form-control bottom">
+	            <div class="checkbox">
+	              <label>
+	                <input type="checkbox"> Remember Me
+	              </label>
+	            </div>
+	            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+	          </form>
+	        </div>
+	        <div id="forgot" class="tab-pane">
+	          <form action="index.html">
+	            <p class="text-muted text-center">Enter your valid e-mail {{.ErrorMessage}}</p>
+	            <input type="email" placeholder="mail@domain.com" class="form-control">
+	            <br>
+	            <button class="btn btn-lg btn-danger btn-block" type="submit">Recover Password</button>
+	          </form>
+	        </div>
+	        <div id="signup" class="tab-pane {{if .SignupActive}}active{{end}}">
+			<p class="text-muted text-center">Enter your Infomation {{.ErrorMessage}}</p>
+	          <form action="/signup" method="post">
+	            <input type="text" placeholder="username" name="username" class="form-control top">
+	            <input type="email" placeholder="mail@domain.com" name="email" class="form-control middle">
+	            <input type="password" placeholder="password" name="password" class="form-control middle">
+	            <input type="password" placeholder="re-password" name="repassword" class="form-control bottom">
+	            <button class="btn btn-lg btn-success btn-block" type="submit">Register</button>
+	          </form>
+	        </div>
+	      </div>
+	      <hr>
+	      <div class="text-center">
+	        <ul class="list-inline">
+	          <li> <a class="text-muted" href="#login" data-toggle="tab">Login</a>  </li>
+	          <li> <a class="text-muted" href="#forgot" data-toggle="tab">Forgot Password</a>  </li>
+	          <li> <a class="text-muted" href="#signup" data-toggle="tab">Signup</a>  </li>
+	        </ul>
+	      </div>
+	    </div>
+		
+		
+	    <script type="text/javascript">
+	      (function($) {
+	        $(document).ready(function() {
+	          $('.list-inline li > a').click(function() {
+	            var activeForm = $(this).attr('href') + ' > form';
+	            //console.log(activeForm);
+	            $(activeForm).addClass('animated fadeIn');
+	            //set timer to 1 seconds, after that, unload the animate animation
+	            setTimeout(function() {
+	              $(activeForm).removeClass('animated fadeIn');
+	            }, 1000);
+	          });
+	        });
+	      })(jQuery);
+	    </script>
+		
 	</body>
 	
 </html>
