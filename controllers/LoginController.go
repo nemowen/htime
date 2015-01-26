@@ -16,7 +16,6 @@
 package controllers
 
 import (
-	"crypto/md5"
 	"github.com/astaxie/beego"
 	"github.com/nemowen/htime/models"
 	"github.com/nemowen/htime/utils"
@@ -41,16 +40,18 @@ func (l *LoginController) Post() {
 		l.Data["ErrorMessage"] = "用户名与密码不能为空"
 	}
 
+	enpassword := utils.EncodeByMd5(password)
+
 	// find user in database with the username
 	dbuser, err := models.GetUserByUsername(username)
-	if err != nil || dbuser == nil || dbuser.Password != password {
+	if err != nil || dbuser == nil || dbuser.Password != enpassword {
 		l.Data["ErrorMessage"] = "用户名或密码有误"
 		return
 	}
 
 	// verify user's password
-	if dbuser.Password == utils.EncodeByMd5(password) {
-		l.TplNames = "admin/login.html"
+	if dbuser.Password == enpassword {
+		l.TplNames = "admin/index.html"
 	}
 }
 
@@ -81,7 +82,7 @@ func (l *LoginController) Signup() {
 	user.Email = email
 
 	// Save user to db
-	_, err := models.CreateUser(user)
+	err := models.CreateUser(user)
 	if err != nil {
 		l.Data["SignupActive"] = true
 		l.Data["ErrorMessage"] = err.Error()

@@ -92,13 +92,14 @@ func IsUserExist(username string) (bool, error) {
 }
 
 // Save user entity
-func CreateUser(u *User) (int64, error) {
+func CreateUser(u *User) error {
 	b, err := IsUserExist(u.Username)
 	if err != nil {
-		return -1, err
+		return err
 	} else if b {
-		return -1, ErrUserAlreadExist
+		return ErrUserAlreadExist
 	}
 	u.CreateTime = time.Now()
-	return orm.InsertOne(u)
+	_, err = orm.InsertOne(u)
+	return err
 }
