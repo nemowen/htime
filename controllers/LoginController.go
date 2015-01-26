@@ -16,8 +16,10 @@
 package controllers
 
 import (
+	"crypto/md5"
 	"github.com/astaxie/beego"
 	"github.com/nemowen/htime/models"
+	"github.com/nemowen/htime/utils"
 )
 
 type LoginController struct {
@@ -39,14 +41,15 @@ func (l *LoginController) Post() {
 		l.Data["ErrorMessage"] = "用户名与密码不能为空"
 	}
 
-	// 查询数据库中的用户
+	// find user in database with the username
 	dbuser, err := models.GetUserByUsername(username)
 	if err != nil || dbuser == nil || dbuser.Password != password {
 		l.Data["ErrorMessage"] = "用户名或密码有误"
 		return
 	}
 
-	if dbuser.Password == password {
+	// verify user's password
+	if dbuser.Password == utils.EncodeByMd5(password) {
 		l.TplNames = "admin/login.html"
 	}
 }
@@ -63,17 +66,21 @@ func (l *LoginController) Signup() {
 	email := l.GetString("email")
 
 	l.TplNames = "admin/login.html"
+
+	// check username, password, repassword parameters
 	if len(username) == 0 || len(password) == 0 || len(repassword) == 0 || len(email) == 0 {
 		l.Data["ErrorMessage"] = "用户名,密码,email,不能为空"
 		l.Data["SignupActive"] = true
 		return
 	}
 
+	// build user object and encode password
 	user := new(models.User)
 	user.Username = username
-	user.Password = password
+	user.Password = utils.EncodeByMd5(password)
 	user.Email = email
 
+	// Save user to db
 	_, err := models.CreateUser(user)
 	if err != nil {
 		l.Data["SignupActive"] = true
