@@ -98,7 +98,18 @@ func CreateUser(u *User) error {
 	} else if b {
 		return ErrUserAlreadExist
 	}
-	u.CreateTime = time.Now()
 	_, err = orm.InsertOne(u)
+	return err
+}
+
+// Update user entity
+func UpdateUser(u *User) error {
+	b, err := IsUserExist(u.Username)
+	if err != nil {
+		return err
+	} else if b {
+		return ErrUserAlreadExist
+	}
+	_, err = orm.Id(u.Id).AllCols().Update(u)
 	return err
 }

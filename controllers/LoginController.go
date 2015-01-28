@@ -53,6 +53,11 @@ func (l *LoginController) Post() {
 	if dbuser.Password == enpassword {
 		l.TplNames = "admin/index.html"
 	}
+
+	// Get user ip
+	dbuser.LoginIp = l.Ctx.Input.IP()
+	models.UpdateUser(dbuser)
+
 }
 
 func (l *LoginController) SignupPage() {
