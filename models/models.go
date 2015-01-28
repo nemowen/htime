@@ -32,7 +32,7 @@ func InitDatabase() error {
 	var err error
 	orm, err = xorm.NewEngine("mysql", "root:wenbin@/htime?charset=utf8")
 	if err != nil {
-		orm.LogError(err.Error())
+		panic(err)
 		return err
 	}
 
@@ -44,7 +44,7 @@ func InitDatabase() error {
 	// regiest these models
 	err = orm.Sync(new(Topic), new(User), new(Category))
 	if err != nil {
-		orm.LogError(err.Error())
+		panic(err)
 		return err
 	}
 
