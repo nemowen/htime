@@ -33,7 +33,6 @@ type User struct {
 
 var (
 	ErrUserNotExist    = errors.New("User does not exist")
-	ErrParameter       = errors.New("Parameter is wrong")
 	ErrUserAlreadExist = errors.New("User alread exist")
 )
 

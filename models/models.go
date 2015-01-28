@@ -16,12 +16,14 @@
 package models
 
 import (
+	"errors"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
 )
 
 var (
-	orm *xorm.Engine
+	orm          *xorm.Engine
+	ErrParameter = errors.New("Parameter is wrong")
 )
 
 func init() {
