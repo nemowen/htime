@@ -58,6 +58,16 @@ func CreateTopic(t *Topic) error {
 	return err
 }
 
+// Delete topic with id
+func DeleteTopicById(id int64) error {
+	topic, err := GetTopicById(id)
+	if err != nil {
+		return nil, err
+	}
+	err = orm.Delete(topic)
+	return err
+}
+
 // Find a topic with id
 func GetTopicById(id int64) (*Topic, error) {
 	topic := new(Topic)
