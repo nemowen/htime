@@ -38,10 +38,10 @@ type Topic struct {
 
 var (
 	ErrTopicNotExist = errors.New("Topic does not exist")
+	ErrTopicIsNull   = errors.New("Topic is null")
 )
 
-// Save topic to db
-func CreateTopic(t *Topic) error {
+func (t *Topic) fixData() {
 	if len(t.Title) > 255 {
 		t.Title = t.Title[:255]
 	}
@@ -54,6 +54,14 @@ func CreateTopic(t *Topic) error {
 	if len(t.SourceFrom) > 255 {
 		t.SourceFrom = t.SourceFrom[:255]
 	}
+}
+
+// Save topic to db
+func CreateTopic(t *Topic) error {
+	if t == nil {
+		return ErrTopicIsNull
+	}
+	t.fixData()
 	_, err := orm.InsertOne(t)
 	return err
 }
@@ -65,6 +73,20 @@ func DeleteTopicById(id int64) error {
 		return nil, err
 	}
 	err = orm.Delete(topic)
+	return err
+}
+
+// update topic
+func UpdateTopic(t *Topic) error {
+	if t.Id == 0 {
+		return ErrTopicIsNull
+	}
+	_, err := GetTopicById(t.Id)
+	if err != nil {
+		return err
+	}
+	t.fixData()
+	_, err = orm.Update(t)
 	return err
 }
 
