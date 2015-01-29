@@ -34,6 +34,7 @@ type User struct {
 var (
 	ErrUserNotExist    = errors.New("User does not exist")
 	ErrUserAlreadExist = errors.New("User alread exist")
+	ErrUserIsNull      = errors.New("User is null")
 )
 
 // Find user with id
@@ -92,6 +93,10 @@ func IsUserExist(username string) (bool, error) {
 
 // Save user entity
 func CreateUser(u *User) error {
+	if u == nil {
+		return ErrUserIsNull
+	}
+	u.fixData()
 	b, err := IsUserExist(u.Username)
 	if err != nil {
 		return err
@@ -104,6 +109,10 @@ func CreateUser(u *User) error {
 
 // Update user entity
 func UpdateUser(u *User) error {
+	if u == nil {
+		return ErrUserIsNull
+	}
+	u.fixData()
 	b, err := IsUserExist(u.Username)
 	if err != nil {
 		return err
@@ -112,4 +121,16 @@ func UpdateUser(u *User) error {
 	}
 	_, err = orm.Id(u.Id).AllCols().Update(u)
 	return err
+}
+
+func (u *User) fixData() {
+	if len(u.Name) > 100 {
+		u.Name = u.Name[:100]
+	}
+	if len(u.Email) > 100 {
+		u.Email = u.Email[:100]
+	}
+	if len(u.Username) > 100 {
+		u.Username = u.Username[:100]
+	}
 }

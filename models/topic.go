@@ -112,7 +112,6 @@ func GetTopics(offset int, size int) ([]*Topic, error) {
 	if size > 50 {
 		size = 50
 	}
-
 	topics := make([]*Topic, 0, size)
 	session := orm.Limit(size, offset).Desc("id")
 	err := session.Find(&topics)
