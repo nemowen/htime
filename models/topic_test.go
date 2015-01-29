@@ -8,7 +8,7 @@ func init() {
 	InitDatabase()
 }
 
-func InsertTopicTest(t *testing.T) {
+func TestInsertTopic(t *testing.T) {
 	topic := new(Topic)
 	topic.Title = "123123"
 	topic.Text = "hello..llasdfas"
@@ -21,7 +21,7 @@ func InsertTopicTest(t *testing.T) {
 	if err != nil {
 		t.Error("GetTopics topics error")
 	}
-	if len(topics) != 1 {
-		t.Error("GetTopics return error want 1")
+	if len(topics) < 1 {
+		t.Fatal("GetTopics return error want 1")
 	}
 }
