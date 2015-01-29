@@ -4,10 +4,6 @@ import (
 	"testing"
 )
 
-func init() {
-	InitDatabase()
-}
-
 func TestInsertTopic(t *testing.T) {
 	topic := new(Topic)
 	topic.Title = "123123"
