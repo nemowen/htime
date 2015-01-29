@@ -70,9 +70,9 @@ func CreateTopic(t *Topic) error {
 func DeleteTopicById(id int64) error {
 	topic, err := GetTopicById(id)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	err = orm.Delete(topic)
+	_, err = orm.Delete(topic)
 	return err
 }
 
@@ -105,7 +105,7 @@ func GetTopicById(id int64) (*Topic, error) {
 }
 
 // GetTopics method returns the topic list
-func GetTopics(offset int64, size int64) ([]*Topic, error) {
+func GetTopics(offset int, size int) ([]*Topic, error) {
 	if size == 0 {
 		size = 20
 	}
