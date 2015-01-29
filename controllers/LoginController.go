@@ -74,7 +74,8 @@ func (l *LoginController) Signup() {
 	l.TplNames = "admin/login.html"
 
 	// check username, password, repassword parameters
-	if len(username) == 0 || len(password) == 0 || len(repassword) == 0 || len(email) == 0 {
+	if len(username) == 0 || len(password) == 0 || len(repassword) == 0 ||
+		len(email) == 0 {
 		l.Data["ErrorMessage"] = "用户名,密码,email,不能为空"
 		l.Data["SignupActive"] = true
 		return
