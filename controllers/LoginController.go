@@ -27,7 +27,7 @@ type LoginController struct {
 
 func (l *LoginController) Get() {
 	l.Data["LoginActive"] = true
-	l.TplNames = "admin/login.html"
+	l.TplNames = "admin/index.html"
 }
 
 func (l *LoginController) Post() {

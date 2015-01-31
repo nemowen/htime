@@ -17,6 +17,7 @@ package models
 
 import (
 	"errors"
+	"github.com/astaxie/beego"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
 )
@@ -32,7 +33,12 @@ func init() {
 
 func InitDatabase() error {
 	var err error
-	orm, err = xorm.NewEngine("mysql", "root:wenbin@/htime?charset=utf8")
+	dbhost := beego.AppConfig.String("dbhost")
+	dbport := beego.AppConfig.String("dbport")
+	dbuser := beego.AppConfig.String("dbuser")
+	dbpassword := beego.AppConfig.String("dbpassword")
+	dbname := beego.AppConfig.String("dbname")
+	orm, err = xorm.NewEngine("mysql", dbuser+":"+dbpassword+"@tcp("+dbhost+":"+dbport+")/"+dbname+"?charset=utf8")
 	if err != nil {
 		panic(err)
 		return err
@@ -50,6 +56,5 @@ func InitDatabase() error {
 		return err
 	}
 
-	orm.LogInfo("init database success.")
 	return nil
 }
