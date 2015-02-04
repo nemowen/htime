@@ -16,12 +16,46 @@
 package models
 
 import (
+	"errors"
 	"time"
 )
 
 type Category struct {
-	Id          int64     `xorm:pk autoincr`
-	Name        string    `xorm:"varchar(100) notnull"` // 分类名称
-	TopicNumber int64     `xorm:"int"`                  // 文章数量
-	CreateTime  time.Time `xorm:DateTime created`       // 创建时间
+	Id         int64     `xorm:pk autoincr`
+	Name       string    `xorm:"varchar(100) notnull"` // 分类名称
+	Count      int64     `xorm:"int"`                  // 文章数量
+	CreateTime time.Time `xorm:DateTime created`       // 创建时间
+}
+
+var (
+	ErrCategoryNotExist    = errors.New("Category does not exist")
+	ErrCategoryAlreadExist = errors.New("Category alread exist")
+	ErrCategoryIsNull      = errors.New("Category is null")
+)
+
+func (c *Category) Save() error {
+	if len(c.Name) > 100 {
+		c.Name = c.Name[:100]
+	}
+	_, err := orm.InsertOne(c)
+	return err
+}
+
+func (c *Category) Delete() error {
+	b, err := orm.Where("id=?", c.Id).Get(c)
+	if err != nil {
+		return err
+	} else if !b {
+		return ErrCategoryNotExist
+	}
+	_, err = orm.Delete(c)
+	return err
+}
+
+func (c *Category) Update() error {
+	if len(c.Name) > 100 {
+		c.Name = c.Name[:100]
+	}
+	_, err := orm.Id(c.Id).AllCols().Update(c)
+	return err
 }

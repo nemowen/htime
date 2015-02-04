@@ -9,15 +9,15 @@ func TestInsertTopic(t *testing.T) {
 	topic.Title = "123123"
 	topic.Text = "hello..llasdfas"
 	topic.Flags = "test"
-	err := CreateTopic(topic)
+	err := topic.Save()
 	if err != nil {
 		t.Error("insert topic error")
 	}
-
 }
 
 func TestGetTopics(t *testing.T) {
-	topics, err := GetTopics(0, 20)
+	topic := new(Topic)
+	topics, err := topic.GetTopics(0, 20)
 	if err != nil {
 		t.Error("GetTopics topics error")
 	}
@@ -28,15 +28,17 @@ func TestGetTopics(t *testing.T) {
 }
 
 func TestGetOne(t *testing.T) {
-	to, err := GetTopicById(1)
+	topic := new(Topic)
+	err := topic.GetTopicById(1)
 	if err != nil {
 		t.Fatal("get topic by id is error")
 	}
-	t.Log(to.Title)
+	t.Log(topic.Title)
 }
 
 func BenchmarkGetOne(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		GetTopicById(1)
+		topic := new(Topic)
+		topic.GetTopicById(1)
 	}
 }

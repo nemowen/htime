@@ -21,7 +21,10 @@ import (
 )
 
 func init() {
-	beego.Router("/", &controllers.MainController{})
-	beego.Router("/login", &controllers.LoginController{})
-	beego.Router("/signup", &controllers.LoginController{}, "get:SignupPage;post:Signup")
+	beego.Router("/", &controllers.HomeController{})
+
+	// 后台管理
+	beego.Router("/admin", &controllers.MainController{}, "*:Index")
+	beego.Router("/admin/login", &controllers.LoginController{}, "*:Login")
+	beego.Router("/admin/logout", &controllers.LoginController{}, "*:Logout")
 }

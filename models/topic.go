@@ -57,7 +57,7 @@ func (t *Topic) fixData() {
 }
 
 // Save topic to db
-func CreateTopic(t *Topic) error {
+func (t *Topic) Save() error {
 	if t == nil {
 		return ErrTopicIsNull
 	}
@@ -67,21 +67,21 @@ func CreateTopic(t *Topic) error {
 }
 
 // Delete topic with id
-func DeleteTopicById(id int64) error {
-	topic, err := GetTopicById(id)
+func (t *Topic) DeleteById(id int64) error {
+	err := t.GetTopicById(id)
 	if err != nil {
 		return err
 	}
-	_, err = orm.Delete(topic)
+	_, err = orm.Delete(t)
 	return err
 }
 
 // update topic
-func UpdateTopic(t *Topic) error {
+func (t *Topic) Update() error {
 	if t.Id == 0 {
 		return ErrTopicIsNull
 	}
-	_, err := GetTopicById(t.Id)
+	err := t.GetTopicById(t.Id)
 	if err != nil {
 		return err
 	}
@@ -91,21 +91,19 @@ func UpdateTopic(t *Topic) error {
 }
 
 // Find a topic with id
-func GetTopicById(id int64) (*Topic, error) {
-	topic := new(Topic)
-
+func (t *Topic) GetTopicById(id int64) error {
 	// id conditon
-	b, err := orm.Where("id=?", id).Get(topic)
+	b, err := orm.Where("id=?", id).Get(t)
 	if err != nil {
-		return nil, err
+		return err
 	} else if !b {
-		return nil, ErrTopicNotExist
+		return ErrTopicNotExist
 	}
-	return topic, nil
+	return nil
 }
 
 // GetTopics method returns the topic list
-func GetTopics(offset int, size int) ([]*Topic, error) {
+func (t *Topic) GetTopics(offset int, size int) ([]*Topic, error) {
 	if size == 0 {
 		size = 20
 	}

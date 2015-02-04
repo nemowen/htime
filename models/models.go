@@ -17,8 +17,9 @@ package models
 
 import (
 	"errors"
-	"github.com/astaxie/beego"
+	//"github.com/astaxie/beego"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/go-xorm/core"
 	"github.com/go-xorm/xorm"
 )
 
@@ -33,16 +34,31 @@ func init() {
 
 func InitDatabase() error {
 	var err error
-	dbhost := beego.AppConfig.String("dbhost")
-	dbport := beego.AppConfig.String("dbport")
-	dbuser := beego.AppConfig.String("dbuser")
-	dbpassword := beego.AppConfig.String("dbpassword")
-	dbname := beego.AppConfig.String("dbname")
-	orm, err = xorm.NewEngine("mysql", dbuser+":"+dbpassword+"@tcp("+dbhost+":"+dbport+")/"+dbname+"?charset=utf8")
+	//dbhost := beego.AppConfig.String("dbhost")
+	//dbport := beego.AppConfig.String("dbport")
+	//dbuser := beego.AppConfig.String("dbuser")
+	//dbpassword := beego.AppConfig.String("dbpassword")
+	//dbname := beego.AppConfig.String("dbname")
+	//tableprefix := beego.AppConfig.String("tableprefix")
+
+	var dbhost = "localhost"
+	var dbport = "3306"
+	var dbuser = "root"
+	var dbpassword = "wenbin"
+	var dbname = "htime"
+	var tableprefix = "t_"
+
+	// connect to mysql
+	orm, err = xorm.NewEngine("mysql", dbuser+":"+dbpassword+"@tcp("+dbhost+":"+dbport+")/"+
+		dbname+"?charset=utf8")
 	if err != nil {
 		panic(err)
 		return err
 	}
+
+	// set database table prefix
+	tbMapper := core.NewPrefixMapper(core.SnakeMapper{}, tableprefix)
+	orm.SetTableMapper(tbMapper)
 
 	//orm.ShowSQL = true  //则会在控制台打印出生成的SQL语句；
 	orm.ShowWarn = true //则会在控制台打印警告信息；

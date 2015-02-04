@@ -26,9 +26,12 @@ type User struct {
 	Email         string    `xorm:varchar(100)`         // `邮箱地址`
 	Username      string    `xorm:varchar(100) notnull` // `用户名称`
 	Password      string    `xorm:varchar(100) notnull` // `用户密码`
-	CreateTime    time.Time `xorm:"DateTime created"`   // `创建时间`
-	LastLoginTime time.Time `xorm:"DateTime updated"`   // `最后登录时间`
-	LoginIp       string    `xorm:"varchar(100)"`       // `登录IP`
+	LoginCount    int64     `xorm:int`                  // 登录次数
+	Authkey       string    `xorm:varchar(10)"`
+	Active        int8      `xorm:int`                // 是否激活
+	CreateTime    time.Time `xorm:"DateTime created"` // `创建时间`
+	LastLoginTime time.Time `xorm:"DateTime updated"` // `最后登录时间`
+	LoginIp       string    `xorm:"varchar(100)"`     // `登录IP`
 }
 
 var (
@@ -38,66 +41,62 @@ var (
 )
 
 // Find user with id
-func GetUserById(id int64) (*User, error) {
-	user := new(User)
-
+func (u *User) GetUserById(id int64) error {
 	// id conditon
-	b, err := orm.Where("id=?", id).Get(user)
+	b, err := orm.Where("id=?", id).Get(u)
 	if err != nil {
-		return nil, err
+		return err
 	} else if !b {
-		return nil, ErrUserNotExist
+		return ErrUserNotExist
 	}
-	return user, nil
+	return nil
 }
 
 // Find user with username
-func GetUserByUsername(username string) (*User, error) {
+func (u *User) GetUserByUsername(username string) error {
 	if len(username) == 0 {
-		return nil, ErrParameter
+		return ErrParameter
 	}
 
-	user := new(User)
-	b, err := orm.Where("username=?", username).Get(user)
+	b, err := orm.Where("username=?", username).Get(u)
 	if err != nil {
-		return nil, err
+		return err
 	} else if !b {
-		return nil, ErrUserNotExist
+		return ErrUserNotExist
 	}
-	return user, nil
+	return nil
 }
 
 // Find user with e-mail address
-func GetUserByEmail(email string) (*User, error) {
+func (u *User) GetUserByEmail(email string) error {
 	if len(email) == 0 {
-		return nil, ErrParameter
+		return ErrParameter
 	}
 
-	user := new(User)
-	b, err := orm.Where("email=?", email).Get(user)
+	b, err := orm.Where("email=?", email).Get(u)
 	if err != nil {
-		return nil, err
+		return err
 	} else if !b {
-		return nil, ErrUserNotExist
+		return ErrUserNotExist
 	}
-	return user, nil
+	return nil
 }
 
-// Check user whether or not exist on db with the username
-func IsUserExist(username string) (bool, error) {
-	if len(username) == 0 {
+// Check user whether or not exist in db with the username
+func (u *User) IsUserExist() (bool, error) {
+	if len(u.Username) == 0 {
 		return false, ErrParameter
 	}
-	return orm.Get(&User{Username: username})
+	return orm.Get(u)
 }
 
 // Save user entity
-func CreateUser(u *User) error {
+func (u *User) SaveUser() error {
 	if u == nil {
 		return ErrUserIsNull
 	}
 	u.fixData()
-	b, err := IsUserExist(u.Username)
+	b, err := u.IsUserExist()
 	if err != nil {
 		return err
 	} else if b {
@@ -108,19 +107,29 @@ func CreateUser(u *User) error {
 }
 
 // Update user entity
-func UpdateUser(u *User) error {
+func (u *User) UpdateUser() error {
 	if u == nil {
 		return ErrUserIsNull
 	}
 	u.fixData()
-	b, err := IsUserExist(u.Username)
+	b, err := u.IsUserExist()
 	if err != nil {
 		return err
-	} else if b {
-		return ErrUserAlreadExist
+	} else if !b {
+		return ErrUserNotExist
 	}
 	_, err = orm.Id(u.Id).AllCols().Update(u)
 	return err
+}
+
+func (u *User) AllUserCount() (int64, error) {
+	total, err := orm.Count(u)
+	return total, err
+}
+
+func (u *User) DisableUserCount() (int64, error) {
+	total, err := orm.Where("Active = ?", 0).Count(u)
+	return total, err
 }
 
 func (u *User) fixData() {

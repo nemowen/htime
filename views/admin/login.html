@@ -1,84 +1,44 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		{{template "admin/base/head.html" .}}
-		{{define "meta"}}
-		<title>htime.me for happy time! 快乐的时光!</title>
-		{{end}}
-		<link rel="stylesheet" href="/static/css/login.min.css" />
-	</head>
+<head>
+	<meta charset="utf-8" />
+	<title>后台管理员登录</title>
+	<link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+	<style type="text/css">
+		body {background:#444}
+		p {}
+		.main {width:350px; margin:100px auto 0 auto; color:#888; overflow:hidden;}
+		.loginform {width:100%; background:#fff; color:#333}
+		fieldset {margin:20px;}
+	</style>
+</head>
+
+<div class="main">
+	<div class="loginform">
+	<form method="post">
+		<input type="hidden" name="login" value="yes" />
+		<fieldset>
+			<legend>后台登录</legend>
+			
+			{{if .errmsg}}
+			<div class="alert alert-error">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			{{.errmsg}}
+			</div>
+			{{end}}		
 	
-	<body class="login">
-		<div class="form-signin">
-	      <div class="text-center">
-	        <h1>h.time</h1>
-	      </div>
-	      <hr>
-	      <div class="tab-content">
-	        <div id="login" class="tab-pane {{if .LoginActive}}active{{end}}">
-	          <form action="/login" method="post">
-	            <p class="text-muted text-center">
-	              Enter your username and password
-					{{.ErrorMessage}}
-	            </p>
-	            <input type="text" name="username" placeholder="Username" value="{{.username}}" class="form-control top">
-	            <input type="password" name="password" placeholder="Password" class="form-control bottom">
-	            <div class="checkbox">
-	              <label>
-	                <input type="checkbox"> Remember Me
-	              </label>
-	            </div>
-	            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-	          </form>
-	        </div>
-	        <div id="forgot" class="tab-pane {{if .ForgotActive}}active{{end}}">
-	          <form action="index.html">
-	            <p class="text-muted text-center">Enter your valid e-mail {{.ErrorMessage}}</p>
-	            <input type="email" placeholder="mail@domain.com" class="form-control">
-	            <br>
-	            <button class="btn btn-lg btn-danger btn-block" type="submit">Recover Password</button>
-	          </form>
-	        </div>
-	        <div id="signup" class="tab-pane {{if .SignupActive}}active{{end}}">
-			<p class="text-muted text-center">Enter your Infomation {{.ErrorMessage}}</p>
-	          <form action="/signup" method="post">
-	            <input type="text" placeholder="username" name="username" class="form-control top">
-	            <input type="email" placeholder="mail@domain.com" name="email" class="form-control middle">
-	            <input type="password" placeholder="password" name="password" class="form-control middle">
-	            <input type="password" placeholder="re-password" name="repassword" class="form-control bottom">
-	            <button class="btn btn-lg btn-success btn-block" type="submit">Register</button>
-	          </form>
-	        </div>
-	      </div>
-	      <hr>
-	      <div class="text-center">
-	        <ul class="list-inline">
-	          <li> <a class="text-muted" href="#login" data-toggle="tab">Login</a>  </li>
-	          <li> <a class="text-muted" href="#forgot" data-toggle="tab">Forgot Password</a>  </li>
-	          <li> <a class="text-muted" href="#signup" data-toggle="tab">Signup</a>  </li>
-	        </ul>
-	      </div>
-	    </div>
-		
-		<!-- Bootstrap core JavaScript
-	    ================================================== -->
-	    <!-- Placed at the end of the document so the pages load faster -->
-		<script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
-		<script src="http://cdn.bootcss.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-	    <script type="text/javascript">
-	      (function($) {
-	        $(document).ready(function() {
-	          $('.list-inline li > a').click(function() {
-	            var activeForm = $(this).attr('href') + ' > form';
-	            //console.log(activeForm);
-	            $(activeForm).addClass('animated fadeIn');
-	            //set timer to 1 seconds, after that, unload the animate animation
-	            setTimeout(function() {
-	              $(activeForm).removeClass('animated fadeIn');
-	            }, 1000);
-	          });
-	        });
-	      })(jQuery);
-	    </script>
-	</body>
+			<label for="account">帐号</label>
+			<input type="text" name="account" class="input-xlarge" id="account" />
+			<label for="password">密码</label>
+			<input type="password" id="password" name="password" class="input-xlarge" />
+			<label class="checkbox">
+			  <input type="checkbox" id="remember" name="remember" value="yes"> 记住我一周
+			</label>
+			<p><button type="submit" class="btn btn-success">登 录</button></p>
+			<hr />
+		</fieldset>
+	</form>
+	</div>
+</div>
+
+</body>
 </html>
