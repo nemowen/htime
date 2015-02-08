@@ -24,7 +24,10 @@ func init() {
 	beego.Router("/", &controllers.HomeController{})
 
 	// 后台管理
-	beego.Router("/admin", &controllers.MainController{}, "*:Index")
 	beego.Router("/admin/login", &controllers.LoginController{}, "*:Login")
 	beego.Router("/admin/logout", &controllers.LoginController{}, "*:Logout")
+
+	beego.Router("/admin", &controllers.MainController{}, "*:Index")
+	beego.Router("/admin/profile", &controllers.MainController{}, "*:Profile")
+
 }

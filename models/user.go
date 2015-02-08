@@ -108,17 +108,8 @@ func (u *User) SaveUser() error {
 
 // Update user entity
 func (u *User) UpdateUser() error {
-	if u == nil {
-		return ErrUserIsNull
-	}
 	u.fixData()
-	b, err := u.IsUserExist()
-	if err != nil {
-		return err
-	} else if !b {
-		return ErrUserNotExist
-	}
-	_, err = orm.Id(u.Id).AllCols().Update(u)
+	_, err := orm.Id(u.Id).AllCols().Update(u)
 	return err
 }
 
