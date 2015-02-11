@@ -27,7 +27,6 @@ type TopicController struct {
 
 // 文章列表
 func (this *TopicController) List() {
-	println("----------", this.userid, this.username)
 	var (
 		page       int64
 		pagesize   int64 = 10
@@ -76,13 +75,11 @@ func (this *TopicController) List() {
 		"/admin/topic/list?status=%d&searchtype=%s&keyword=%s&page=%s", status,
 		searchtype, keyword, "%d")).ToString()
 
-	this.TplNames = "admin/topic_list.html"
-	this.Layout = "admin/layout.html"
+	this.display("topic_list")
 }
 
 func (this *TopicController) Add() {
-	this.TplNames = "admin/topic_add.html"
-	this.Layout = "admin/layout.html"
+	this.display("topic_add")
 }
 
 func (this *TopicController) Save() {
@@ -115,14 +112,15 @@ func (this *TopicController) Save() {
 		topic.Cover = "/static/upload/defaultcover.png"
 	}
 
-	user := new(models.User)
-	user.GetUserById(this.userid)
-	topic.AuthorId = user.Id
-	topic.Author = user
-
+	topic.AuthorId = this.userid
 	topic.Save()
+	this.display("topic_add")
+}
 
-	this.TplNames = "admin/topic_add.html"
-	this.Layout = "admin/layout.html"
-
+//删除
+func (this *TopicController) Delete() {
+	id, _ := this.GetInt64("id")
+	topic := models.Topic{}
+	topic.DeleteById(id)
+	this.Redirect("/admin/topic/list", 302)
 }

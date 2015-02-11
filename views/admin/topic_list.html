@@ -49,7 +49,7 @@
 			</td>
 			<td class="hl_tag">{{str2html $v.Tags}}</td>
 			<td>{{$v.Views}}</td>
-			<td class="hl_author">{{$v.Author}}</td>
+			<td class="hl_author">{{$v.AuthorId}}</td>
 			<td>{{date $v.CreateTime "m月d日 H:i:s"}}</td>
 			<td><a href="/admin/topic/edit?id={{$v.Id}}">编辑</a> | <a href="/admin/topic/delete?id={{$v.Id}}" onclick="return del_confirm()">删除</a></td>
 		</tr>
