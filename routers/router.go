@@ -35,5 +35,6 @@ func init() {
 	beego.Router("/admin/topic/save", &controllers.TopicController{}, "post:Save")
 	beego.Router("/admin/topic/list", &controllers.TopicController{}, "*:List")
 	beego.Router("/admin/topic/delete", &controllers.TopicController{}, "*:Delete")
+	beego.Router("/admin/topic/edit", &controllers.TopicController{}, "*:Edit")
 
 }

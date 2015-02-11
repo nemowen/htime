@@ -78,15 +78,8 @@ func (t *Topic) DeleteById(id int64) error {
 
 // update topic
 func (t *Topic) Update() error {
-	if t.Id == 0 {
-		return ErrTopicIsNull
-	}
-	err := t.GetTopicById(t.Id)
-	if err != nil {
-		return err
-	}
 	t.fixData()
-	_, err = orm.Update(t)
+	_, err := orm.Id(t.Id).AllCols().Update(t)
 	return err
 }
 

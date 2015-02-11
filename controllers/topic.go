@@ -59,12 +59,14 @@ func (this *TopicController) List() {
 	}
 
 	count, _ := topic.Count()
+
 	if count > 0 {
 		list, _ = topic.GetTopics(int(offset), int(pagesize))
 	}
 
 	this.Data["searchtype"] = searchtype
 	this.Data["keyword"] = keyword
+	this.Data["count_0"] = count
 	topic.Status = 1
 	this.Data["count_1"], _ = topic.Count()
 	topic.Status = 2
@@ -84,7 +86,7 @@ func (this *TopicController) Add() {
 
 func (this *TopicController) Save() {
 	topic := new(models.Topic)
-
+	id, _ := this.GetInt64("id")
 	topic.Title = strings.TrimSpace(this.GetString("title"))
 	topic.SourceFrom = strings.TrimSpace(this.GetString("sourcefrom"))
 	topic.Content = this.GetString("content")
@@ -99,22 +101,28 @@ func (this *TopicController) Save() {
 		this.showmsg("标题不能为空！")
 	}
 
-	topic.Status, _ = this.GetInt8("status")
+	status, _ := this.GetInt64("status")
 
 	if this.GetString("istop") == "1" {
 		topic.IsTop = 1
 	}
 
-	if topic.Status != 1 && topic.Status != 2 {
-		topic.Status = 0
+	if status != 1 && status != 2 {
+		status = 0
 	}
+	topic.Status = int8(status)
 	if topic.Cover == "" {
 		topic.Cover = "/static/upload/defaultcover.png"
 	}
 
 	topic.AuthorId = this.userid
-	topic.Save()
-	this.display("topic_add")
+	if id > 0 {
+		topic.Id = id
+		topic.Update()
+	} else {
+		topic.Save()
+	}
+	this.Redirect("/admin/topic/list", 302)
 }
 
 //删除
@@ -123,4 +131,14 @@ func (this *TopicController) Delete() {
 	topic := models.Topic{}
 	topic.DeleteById(id)
 	this.Redirect("/admin/topic/list", 302)
+}
+
+func (this *TopicController) Edit() {
+	id, _ := this.GetInt64("id")
+	topic := models.Topic{}
+	if topic.GetTopicById(id) != nil {
+		this.Abort("404")
+	}
+	this.Data["topic"] = topic
+	this.display("topic_edit")
 }
