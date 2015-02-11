@@ -18,6 +18,7 @@ package controllers
 import (
 	"fmt"
 	"github.com/nemowen/htime/models"
+	"strconv"
 	"strings"
 )
 
@@ -51,8 +52,6 @@ func (this *TopicController) List() {
 		switch searchtype {
 		case "title":
 			topic.Title = keyword
-		case "author":
-			topic.Author.Username = keyword
 		case "tag":
 			topic.Tags = keyword
 		}
@@ -66,7 +65,8 @@ func (this *TopicController) List() {
 
 	this.Data["searchtype"] = searchtype
 	this.Data["keyword"] = keyword
-	this.Data["count_0"] = count
+	topic.Status = 0
+	this.Data["count_0"], _ = topic.Count()
 	topic.Status = 1
 	this.Data["count_1"], _ = topic.Count()
 	topic.Status = 2
@@ -125,7 +125,7 @@ func (this *TopicController) Save() {
 	this.Redirect("/admin/topic/list", 302)
 }
 
-//删除
+// 删除
 func (this *TopicController) Delete() {
 	id, _ := this.GetInt64("id")
 	topic := models.Topic{}
@@ -133,6 +133,7 @@ func (this *TopicController) Delete() {
 	this.Redirect("/admin/topic/list", 302)
 }
 
+// 编辑
 func (this *TopicController) Edit() {
 	id, _ := this.GetInt64("id")
 	topic := models.Topic{}
@@ -141,4 +142,35 @@ func (this *TopicController) Edit() {
 	}
 	this.Data["topic"] = topic
 	this.display("topic_edit")
+}
+
+// 批处理
+func (this *TopicController) Batch() {
+	ids := this.GetStrings("ids[]")
+	op := this.GetString("op")
+
+	idarr := make([]int64, 0, 10)
+	for _, v := range ids {
+		if id, _ := strconv.Atoi(v); id > 0 {
+			idarr = append(idarr, int64(id))
+		}
+	}
+
+	var topic models.Topic
+	switch op {
+	case "topub": //移到已发布
+		topic.Status = 0
+		models.GetSession().In("id", idarr).Cols("status").Update(topic)
+	case "todrafts": //移到草稿箱
+		topic.Status = 1
+		models.GetSession().In("id", idarr).Cols("status").Update(topic)
+	case "totrash": //移到回收站
+		topic.Status = 2
+		models.GetSession().In("id", idarr).Cols("status").Update(topic)
+	case "delete": //批量删除
+		for _, id := range idarr {
+			topic.DeleteById(id)
+		}
+	}
+	this.Redirect(this.Ctx.Request.Referer(), 302)
 }

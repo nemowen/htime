@@ -56,31 +56,31 @@ func (this *Pager) ToString() string {
 
 	buf.WriteString("<div class=\"page\">")
 	if this.Page > 1 {
-		buf.WriteString(fmt.Sprintf("<a href=\"%s\">&laquo;</a>", this.url(this.Page-1)))
+		buf.WriteString(fmt.Sprintf(" <a href=\"%s\">&laquo;</a> ", this.url(this.Page-1)))
 	} else {
-		buf.WriteString("<b>&laquo;</b>")
+		buf.WriteString(" <b>&laquo;</b> ")
 	}
 
 	if this.Page > linknum {
-		buf.WriteString(fmt.Sprintf("<a href=\"%s\">1</a>", this.url(1)))
+		buf.WriteString(fmt.Sprintf(" <a href=\"%s\">1</a> ", this.url(1)))
 	}
 
 	for i := from; i <= to; i++ {
 		if i == this.Page {
-			buf.WriteString(fmt.Sprintf("<b>%d</b>", i))
+			buf.WriteString(fmt.Sprintf(" <b>%d</b> ", i))
 		} else {
-			buf.WriteString(fmt.Sprintf("<a href=\"%s\">%d</a>", this.url(i), i))
+			buf.WriteString(fmt.Sprintf(" <a href=\"%s\">%d</a> ", this.url(i), i))
 		}
 	}
 
 	if totalpage > to {
-		buf.WriteString(fmt.Sprintf("<a href=\"%s\">%d</a>", this.url(totalpage), totalpage))
+		buf.WriteString(fmt.Sprintf(" <a href=\"%s\">%d</a> ", this.url(totalpage), totalpage))
 	}
 
 	if this.Page < totalpage {
-		buf.WriteString(fmt.Sprintf("<a href=\"%s\">&raquo;</a>", this.url(this.Page+1)))
+		buf.WriteString(fmt.Sprintf(" <a href=\"%s\">&raquo;</a> ", this.url(this.Page+1)))
 	} else {
-		buf.WriteString(fmt.Sprintf("<b>&raquo;</b>"))
+		buf.WriteString(fmt.Sprintf(" <b>&raquo;</b> "))
 	}
 	buf.WriteString("</div>")
 

@@ -60,7 +60,7 @@ func InitDatabase() error {
 	tbMapper := core.NewPrefixMapper(core.SnakeMapper{}, tableprefix)
 	orm.SetTableMapper(tbMapper)
 
-	//orm.ShowSQL = true  //则会在控制台打印出生成的SQL语句；
+	orm.ShowSQL = true  //则会在控制台打印出生成的SQL语句；
 	orm.ShowWarn = true //则会在控制台打印警告信息；
 	//orm.ShowDebug = true //则会在控制台打印调试信息；
 	orm.ShowErr = true //则会在控制台打印错误信息；
@@ -73,4 +73,10 @@ func InitDatabase() error {
 	}
 
 	return nil
+}
+
+func GetSession() *xorm.Session {
+	session := orm.NewSession()
+	session.IsAutoClose = true
+	return session
 }

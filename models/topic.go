@@ -98,7 +98,7 @@ func (t *Topic) GetTopicById(id int64) error {
 // GetTopics method returns the topic list
 func (t *Topic) GetTopics(offset int, size int) ([]*Topic, error) {
 	if size == 0 {
-		size = 20
+		size = 10
 	}
 	if size > 50 {
 		size = 50
