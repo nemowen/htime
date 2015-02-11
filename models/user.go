@@ -134,3 +134,7 @@ func (u *User) fixData() {
 		u.Username = u.Username[:100]
 	}
 }
+
+func (u *User) String() string {
+	return u.Username
+}

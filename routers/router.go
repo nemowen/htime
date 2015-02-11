@@ -30,4 +30,9 @@ func init() {
 	beego.Router("/admin", &controllers.MainController{}, "*:Index")
 	beego.Router("/admin/profile", &controllers.MainController{}, "*:Profile")
 
+	// 文章管理
+	beego.Router("/admin/topic/add", &controllers.TopicController{}, "*:Add")
+	beego.Router("/admin/topic/save", &controllers.TopicController{}, "post:Save")
+	beego.Router("/admin/topic/list", &controllers.TopicController{}, "*:List")
+
 }

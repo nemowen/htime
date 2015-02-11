@@ -23,17 +23,20 @@ import (
 type Topic struct {
 	Id          int64     `xorm:"pk autoincr"`
 	Title       string    `xorm:"varchar(255) notnull"` // 标题
-	Text        string    `xorm:"text"`                 // 内容
-	Images      string    `xorm:"varchar(255)"`         // 图片
-	Flags       string    `xorm:"varchar(255)"`         // 标签:多个标签使用|分隔
+	TitleColor  string    `xorm:varchar(7)`             // 标题置顶颜色
+	Content     string    `xorm:"text"`                 // 内容
+	Tags        string    `xorm:"varchar(255)"`         // 标签:多个标签使用|分隔
 	CategorieId int64     `xorm:index`                  // 分类ID
 	Categorie   *Category `xorm:"- <- ->"`              // 分类
 	AuthorId    int64     `xorm:index`                  // 作者ID
 	Author      *User     `xorm:"- <- ->"`              // 作者
+	Status      int8      `xorm:int`                    // 发布状态
+	IsTop       int8      `xorm:int`                    // 是否致顶
+	Cover       string    `xorm:varchar(100)`           // 封面图片
+	Views       int64     `xorm:int`                    // 阅读数
 	SourceFrom  string    `xorm:"varchar(255)"`         // 信息来源
 	CreateTime  time.Time `xorm:"DateTime created"`     // 创建时间
 	UpdateTime  time.Time `xorm:"DateTime updated"`     // 更新时间
-	Version     int32     `xorm:"version"`
 }
 
 var (
@@ -45,11 +48,8 @@ func (t *Topic) fixData() {
 	if len(t.Title) > 255 {
 		t.Title = t.Title[:255]
 	}
-	if len(t.Images) > 255 {
-		t.Images = t.Images[:255]
-	}
-	if len(t.Flags) > 255 {
-		t.Flags = t.Flags[:255]
+	if len(t.Tags) > 255 {
+		t.Tags = t.Tags[:255]
 	}
 	if len(t.SourceFrom) > 255 {
 		t.SourceFrom = t.SourceFrom[:255]
@@ -111,7 +111,23 @@ func (t *Topic) GetTopics(offset int, size int) ([]*Topic, error) {
 		size = 50
 	}
 	topics := make([]*Topic, 0, size)
-	session := orm.Limit(size, offset).Desc("id")
-	err := session.Find(&topics)
+	session := orm.Where("status=?", t.Status)
+	if len(t.Title) > 0 {
+		session.And("title=?", t.Title)
+	} else if len(t.Tags) > 0 {
+		session.And("tags=?", t.Tags)
+	}
+	err := session.Limit(size, offset).Desc("id").Find(&topics)
 	return topics, err
+}
+
+func (t *Topic) Count() (int64, error) {
+	session := orm.Where("status=?", t.Status)
+	if len(t.Title) > 0 {
+		session.And("title=?", t.Title)
+	} else if len(t.Tags) > 0 {
+		session.And("tags=?", t.Tags)
+	}
+
+	return session.Count(t)
 }
