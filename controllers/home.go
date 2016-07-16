@@ -15,15 +15,19 @@
 // An open source project for personal blog website
 package controllers
 
-import "github.com/astaxie/beego"
+import (
+	"github.com/astaxie/beego"
+	"github.com/nemowen/htime/models"
+)
 
 type HomeController struct {
 	beego.Controller
 }
 
 func (this *HomeController) Get() {
-	this.Data["Website"] = "htime.me"
-	this.Data["Email"] = "nemowen@gmail.com"
+	topic := new(models.Topic)
+	topics, _ := topic.GetTopics(0, 10)
+	this.Data["Topics"] = topics
 	this.TplNames = "index.html"
 
 }

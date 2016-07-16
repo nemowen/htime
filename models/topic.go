@@ -110,7 +110,7 @@ func (t *Topic) GetTopics(offset int, size int) ([]*Topic, error) {
 	} else if len(t.Tags) > 0 {
 		session.And("tags=?", t.Tags)
 	}
-	err := session.Limit(size, offset).Desc("id").Find(&topics)
+	err := session.Limit(size, offset).Desc("is_top,id").Find(&topics)
 	return topics, err
 }
 

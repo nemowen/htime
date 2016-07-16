@@ -17,6 +17,7 @@ package models
 
 import (
 	"errors"
+
 	"github.com/astaxie/beego"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/core"
@@ -40,13 +41,7 @@ func InitDatabase() error {
 	dbpassword := beego.AppConfig.String("dbpassword")
 	dbname := beego.AppConfig.String("dbname")
 	tableprefix := beego.AppConfig.String("tableprefix")
-
-	//	var dbhost = "localhost"
-	//	var dbport = "3306"
-	//	var dbuser = "root"
-	//	var dbpassword = "wenbin"
-	//	var dbname = "htime"
-	//	var tableprefix = "t_"
+	runmode := beego.AppConfig.String("runmode")
 
 	// connect to mysql
 	orm, err = xorm.NewEngine("mysql", dbuser+":"+dbpassword+"@tcp("+dbhost+":"+dbport+")/"+
@@ -60,9 +55,11 @@ func InitDatabase() error {
 	tbMapper := core.NewPrefixMapper(core.SnakeMapper{}, tableprefix)
 	orm.SetTableMapper(tbMapper)
 
-	orm.ShowSQL = true  //则会在控制台打印出生成的SQL语句；
-	orm.ShowWarn = true //则会在控制台打印警告信息；
-	//orm.ShowDebug = true //则会在控制台打印调试信息；
+	if runmode == "dev" {
+		orm.ShowSQL = true   //则会在控制台打印出生成的SQL语句；
+		orm.ShowWarn = true  //则会在控制台打印警告信息；
+		orm.ShowDebug = true //则会在控制台打印调试信息；
+	}
 	orm.ShowErr = true //则会在控制台打印错误信息；
 
 	// regiest these models
