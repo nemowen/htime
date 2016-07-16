@@ -30,6 +30,9 @@ func init() {
 	beego.Router("/admin", &controllers.MainController{}, "*:Index")
 	beego.Router("/admin/profile", &controllers.MainController{}, "*:Profile")
 
+	//系统管理
+	//beego.Router("/admin/system/setting", &controllers.SystemController{}, "*:Setting")
+
 	// 文章管理
 	beego.Router("/admin/topic/add", &controllers.TopicController{}, "*:Add")
 	beego.Router("/admin/topic/save", &controllers.TopicController{}, "post:Save")
@@ -37,5 +40,12 @@ func init() {
 	beego.Router("/admin/topic/delete", &controllers.TopicController{}, "*:Delete")
 	beego.Router("/admin/topic/edit", &controllers.TopicController{}, "*:Edit")
 	beego.Router("/admin/topic/batch", &controllers.TopicController{}, "*:Batch")
+	beego.Router("/admin/topic/upload", &controllers.TopicController{}, "*:Upload")
+
+	//用户管理
+	beego.Router("/admin/user/list", &controllers.UserController{}, "*:List")
+	beego.Router("/admin/user/add", &controllers.UserController{}, "*:Add")
+	beego.Router("/admin/user/edit", &controllers.UserController{}, "*:Edit")
+	beego.Router("/admin/user/delete", &controllers.UserController{}, "*:Delete")
 
 }

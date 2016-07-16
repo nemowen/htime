@@ -17,7 +17,7 @@ package models
 
 import (
 	"errors"
-	//"github.com/astaxie/beego"
+	"github.com/astaxie/beego"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/core"
 	"github.com/go-xorm/xorm"
@@ -34,19 +34,19 @@ func init() {
 
 func InitDatabase() error {
 	var err error
-	//dbhost := beego.AppConfig.String("dbhost")
-	//dbport := beego.AppConfig.String("dbport")
-	//dbuser := beego.AppConfig.String("dbuser")
-	//dbpassword := beego.AppConfig.String("dbpassword")
-	//dbname := beego.AppConfig.String("dbname")
-	//tableprefix := beego.AppConfig.String("tableprefix")
+	dbhost := beego.AppConfig.String("dbhost")
+	dbport := beego.AppConfig.String("dbport")
+	dbuser := beego.AppConfig.String("dbuser")
+	dbpassword := beego.AppConfig.String("dbpassword")
+	dbname := beego.AppConfig.String("dbname")
+	tableprefix := beego.AppConfig.String("tableprefix")
 
-	var dbhost = "localhost"
-	var dbport = "3306"
-	var dbuser = "root"
-	var dbpassword = "wenbin"
-	var dbname = "htime"
-	var tableprefix = "t_"
+	//	var dbhost = "localhost"
+	//	var dbport = "3306"
+	//	var dbuser = "root"
+	//	var dbpassword = "wenbin"
+	//	var dbname = "htime"
+	//	var tableprefix = "t_"
 
 	// connect to mysql
 	orm, err = xorm.NewEngine("mysql", dbuser+":"+dbpassword+"@tcp("+dbhost+":"+dbport+")/"+

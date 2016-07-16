@@ -123,6 +123,24 @@ func (u *User) DisableUserCount() (int64, error) {
 	return total, err
 }
 
+// GetUsers method returns the user list
+func (u *User) GetUsers(offset int, size int) ([]*User, error) {
+	if size == 0 {
+		size = 10
+	}
+	if size > 50 {
+		size = 50
+	}
+	users := make([]*User, 0, size)
+	err := orm.Limit(size, offset).Desc("id").Find(&users)
+	return users, err
+}
+
+func (u *User) Delete() error {
+	_, err := orm.Delete(u)
+	return err
+}
+
 func (u *User) fixData() {
 	if len(u.Name) > 100 {
 		u.Name = u.Name[:100]
