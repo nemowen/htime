@@ -24,6 +24,7 @@ type Topic struct {
 	Id          int64     `xorm:"pk autoincr"`
 	Title       string    `xorm:"varchar(255) notnull"` // 标题
 	TitleColor  string    `xorm:varchar(7)`             // 标题置顶颜色
+	PreContent  string    `xorm:"varchar(255)"`         // 预读内容
 	Content     string    `xorm:"text"`                 // 内容
 	Tags        string    `xorm:"varchar(255)"`         // 标签:多个标签使用|分隔
 	CategorieId int64     `xorm:index`                  // 分类ID

@@ -25,9 +25,11 @@ type HomeController struct {
 }
 
 func (this *HomeController) Get() {
+	version := beego.AppConfig.String("version")
 	topic := new(models.Topic)
 	topics, _ := topic.GetTopics(0, 10)
 	this.Data["Topics"] = topics
+	this.Data["Version"] = version
 	this.TplNames = "index.html"
 
 }

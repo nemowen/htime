@@ -70,7 +70,7 @@
 <body>
 <header class="am-topbar">
   <h1 class="am-topbar-brand">
-    <a href="#">哇...</a>
+    <a href="#">哇快看</a>
   </h1>
 
   <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only"
@@ -111,14 +111,42 @@
       <h3 class="am-article-title blog-title">
         <a href="#">{{$v.Title}}</a>
       </h3>
-      <h4 class="am-article-meta blog-meta"> 阅读: {{$v.Views}} | {{date $v.CreateTime "Y-m-j"}} 来源: {{$v.SourceFrom}}</h4>
+      <div class="am-article-meta blog-meta">
+	  <span class="am-badge am-round am-icon-eye"> {{$v.Views}}</span> 
+	&nbsp;&nbsp;
+	  <span class="am-badge am-badge-success am-round am-icon-calendar-check-o"> {{date $v.CreateTime "Y-m-j"}}</span>
+	  来源: <span class="am-badge am-badge-warning am-round"> {{$v.SourceFrom}}</span>
+	  </div>
       <div class="am-g blog-content">
       	{{$v.Content | str2html}}
       </div>
     </article>
-    <hr class="am-article-divider blog-hr">
-	{{end}}
 	
+	<div class="am-list-item-text am-icon-tags">
+	{{$arr := Split $v.Tags ","}}
+	{{range $k, $v := $arr}}
+		<span class="am-badge am-round"> {{$v}}</span> 
+	{{end}}
+	</div>
+    <hr class="am-article-divider blog-hr">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="{{$v.Id}}" data-title="{{$v.Title}}" data-url="./article?id={{$v.Id}}"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"wooow"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+		</script>
+	<!-- 多说公共JS代码 end -->	
+	{{end}}
+
     <ul class="am-pagination blog-pagination">
       <li class="am-pagination-prev"><a href="">&laquo; 上一页</a></li>
       <li class="am-pagination-next"><a href="">下一页 &raquo;</a></li>
@@ -179,7 +207,8 @@
 
 <footer class="blog-footer">
   <p>blog template<br/>
-    <small>© Copyright XXX. by the AmazeUI Team.</small>
+    <small>© Copyright 2016 wooow designed by nemowen.</small>
+	<small>v.{{.Version}}</small>
   </p>
 </footer>
 
