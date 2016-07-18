@@ -24,5 +24,5 @@ func EncodeByMd5(str string) string {
 	md5Inst := md5.New()
 	md5Inst.Write([]byte(str))
 	result := md5Inst.Sum([]byte("*nora*"))
-	return fmt.Sprintf("%X\n", result)
+	return fmt.Sprintf("%X", result)
 }

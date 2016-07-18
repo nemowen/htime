@@ -16,10 +16,11 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego"
-	"github.com/nemowen/htime/models"
 	"strconv"
 	"strings"
+
+	"github.com/astaxie/beego"
+	"github.com/nemowen/htime/models"
 )
 
 const (
@@ -81,7 +82,7 @@ func (this *baseController) display(tpl ...string) {
 	this.Data["adminid"] = this.userid
 	this.Data["adminname"] = this.username
 	this.Layout = "admin/layout.html"
-	this.TplNames = tplname
+	this.TplName = tplname
 }
 
 //权限验证
@@ -101,7 +102,7 @@ func (this *baseController) showmsg(msg ...string) {
 	this.Data["msg"] = msg[0]
 	this.Data["redirect"] = msg[1]
 	this.Layout = this.moduleName + "/layout.html"
-	this.TplNames = this.moduleName + "/" + "showmsg.html"
+	this.TplName = this.moduleName + "/" + "showmsg.html"
 	this.Render()
 	this.StopRun()
 }

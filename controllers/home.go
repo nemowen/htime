@@ -30,6 +30,6 @@ func (this *HomeController) Get() {
 	topics, _ := topic.GetTopics(0, 10)
 	this.Data["Topics"] = topics
 	this.Data["Version"] = version
-	this.TplNames = "index.html"
+	this.TplName = "index.html"
 
 }

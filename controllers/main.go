@@ -16,11 +16,12 @@
 package controllers
 
 import (
-	"github.com/nemowen/htime/models"
-	"github.com/nemowen/htime/utils"
 	"os"
 	"runtime"
 	"strings"
+
+	"github.com/nemowen/htime/models"
+	"github.com/nemowen/htime/utils"
 )
 
 type MainController struct {
@@ -39,7 +40,7 @@ func (this *MainController) Index() {
 	this.Data["DisableUserNum"], _ = user.DisableUserCount()
 	this.Data["AllUserNum"], _ = user.AllUserCount()
 	this.Layout = "admin/layout.html"
-	this.TplNames = "admin/index.html"
+	this.TplName = "admin/index.html"
 }
 
 //资料修改

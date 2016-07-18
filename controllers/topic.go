@@ -219,7 +219,7 @@ func (this *TopicController) Upload() {
 		}
 	}
 	this.Data["json"] = out
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 func createSmallPic(file io.Reader, fileSmall string, w, h int) error {

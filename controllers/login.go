@@ -16,10 +16,11 @@
 package controllers
 
 import (
-	"github.com/nemowen/htime/models"
-	"github.com/nemowen/htime/utils"
 	"strconv"
 	"strings"
+
+	"github.com/nemowen/htime/models"
+	"github.com/nemowen/htime/utils"
 )
 
 type LoginController struct {
@@ -36,7 +37,9 @@ func (l *LoginController) Login() {
 			// find user in database with the account
 			dbuser := new(models.User)
 			err := dbuser.GetUserByUsername(account)
-			if err != nil || dbuser == nil || dbuser.Password != utils.EncodeByMd5(password) {
+			println(dbuser.Username + "1==========" + dbuser.Password + "||")
+			if err != nil || dbuser.Password != utils.EncodeByMd5(password) {
+				println(dbuser.Username + "2==========" + utils.EncodeByMd5(password) + "||")
 				l.Data["errmsg"] = "用户名或密码有误"
 			} else if dbuser.Active == 0 {
 				l.Data["errmsg"] = "该帐号未激活"
@@ -59,7 +62,7 @@ func (l *LoginController) Login() {
 			}
 		}
 	}
-	l.TplNames = "admin/login.html"
+	l.TplName = "admin/login.html"
 }
 
 //退出登录
