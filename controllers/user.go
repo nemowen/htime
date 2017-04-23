@@ -101,7 +101,7 @@ func (this *UserController) Add() {
 			user.Email = email
 			user.Active = int8(active)
 			if err := user.SaveUser(); err != nil {
-				this.showmsg(err.Error())
+				this.showMsg(err.Error())
 			}
 			this.Redirect("/admin/user/list", 302)
 		}
@@ -118,7 +118,7 @@ func (this *UserController) Edit() {
 	id, _ := this.GetInt64("id")
 	user := new(models.User)
 	if err := user.GetUserById(id); err != nil {
-		this.showmsg("用户不存在")
+		this.showMsg("用户不存在")
 	}
 
 	errmsg := make(map[string]string)
@@ -167,7 +167,7 @@ func (this *UserController) Edit() {
 func (this *UserController) Delete() {
 	id, _ := this.GetInt64("id")
 	if id == 1 {
-		this.showmsg("不能删除ID为1的用户")
+		this.showMsg("不能删除ID为1的用户")
 	}
 	user := new(models.User)
 	if user.GetUserById(id) == nil {

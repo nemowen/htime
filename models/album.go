@@ -20,57 +20,58 @@ import (
 )
 
 // 相册表
-type Photo struct {
-	Id       int64     `xorm:int`
-	Albumid  int64     `xorm:int`
-	Des      string    `xorm:varchar(100)`
-	Posttime time.Time `xorm:"DateTime created"`
-	Url      string    `xorm:"varchar(70)"`
-	Small    string    `xorm:"-"`
+type Album struct {
+	Id       int64
+	Name     string    `xorm:"size(100)"`
+	Cover    string    `xorm:"size(70)"`
+	Posttime time.Time `xorm:"type(datetime);index"`
+	Ishide   int8
+	Rank     int8
+	Photonum int64
 }
 
-func (m *Photo) Insert() error {
+func (m *Album) Insert() error {
 	if _, err := orm.InsertOne(m); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *Photo) Read(fields ...string) error {
+func (m *Album) Read(fields ...string) error {
 	if b, err := orm.Cols(fields...).Get(m); !b {
 		return err
 	}
 	return nil
 }
 
-func (m *Photo) Update(fields ...string) error {
+func (m *Album) Update(fields ...string) error {
 	if _, err := orm.Cols(fields...).Update(m); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *Photo) Delete() error {
+func (m *Album) Delete() error {
 	if _, err := orm.Delete(m); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (t *Photo) GetPhotos(offset int, size int) ([]*Photo, error) {
+func (t *Album) GetAlbums(offset int, size int) ([]*Album, error) {
 	if size == 0 {
 		size = MIN_PAGE_SIZE
 	}
 	if size > MAX_PAGE_SIZE {
 		size = MAX_PAGE_SIZE
 	}
-	photos := make([]*Photo, 0, size)
+	albums := make([]*Album, 0, size)
 	session := orm.Where("1=1")
-	if t.Albumid > 0 {
-		session.And("albumid=?", t.Albumid)
-	} else if len(t.Des) > 0 {
-		session.And("des like '%?%'", t.Des)
-	}
-	err := session.Limit(size, offset).Desc("posttime,id").Find(&photos)
-	return photos, err
+	err := session.Limit(size, offset).Desc("id").Find(&albums)
+	return albums, err
+}
+
+func (t *Album) Count() (int64, error) {
+	session := orm.Where("1=1")
+	return session.Count(t)
 }

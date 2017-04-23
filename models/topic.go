@@ -99,10 +99,10 @@ func (t *Topic) GetTopicById(id int64) error {
 // GetTopics method returns the topic list
 func (t *Topic) GetTopics(offset int, size int) ([]*Topic, error) {
 	if size == 0 {
-		size = 10
+		size = MIN_PAGE_SIZE
 	}
-	if size > 50 {
-		size = 50
+	if size > MAX_PAGE_SIZE {
+		size = MAX_PAGE_SIZE
 	}
 	topics := make([]*Topic, 0, size)
 	session := orm.Where("status=?", t.Status)

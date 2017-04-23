@@ -46,7 +46,7 @@ func (this *MainController) Index() {
 func (this *MainController) Profile() {
 	user := new(models.User)
 	if err := user.GetUserById(this.userid); err != nil {
-		this.showmsg(err.Error())
+		this.showMsg(err.Error())
 	}
 	if this.Ctx.Request.Method == "POST" {
 		errmsg := make(map[string]string)

@@ -7,8 +7,8 @@ import (
 func TestInsertTopic(t *testing.T) {
 	topic := new(Topic)
 	topic.Title = "123123"
-	topic.Text = "hello..llasdfas"
-	topic.Flags = "test"
+	topic.Content = "hello..llasdfas"
+	topic.Tags = "test"
 	err := topic.Save()
 	if err != nil {
 		t.Error("insert topic error")

@@ -103,7 +103,7 @@ func (this *TopicController) Save() {
 	topic.IsTop = 0
 
 	if topic.Title == "" {
-		this.showmsg("标题不能为空！")
+		this.showMsg("标题不能为空！")
 	}
 
 	status, _ := this.GetInt64("status")

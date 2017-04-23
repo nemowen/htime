@@ -42,10 +42,22 @@ func init() {
 	beego.Router("/admin/topic/batch", &controllers.TopicController{}, "*:Batch")
 	beego.Router("/admin/topic/upload", &controllers.TopicController{}, "*:Upload")
 
-	//用户管理
+	// 用户管理
 	beego.Router("/admin/user/list", &controllers.UserController{}, "*:List")
 	beego.Router("/admin/user/add", &controllers.UserController{}, "*:Add")
 	beego.Router("/admin/user/edit", &controllers.UserController{}, "*:Edit")
 	beego.Router("/admin/user/delete", &controllers.UserController{}, "*:Delete")
+
+	// 照片管理
+	beego.Router("/admin/photo/list", &controllers.PhotoController{}, "*:List")
+	beego.Router("/admin/photo/cover", &controllers.PhotoController{}, "*:Cover")
+	beego.Router("/admin/photo/delete", &controllers.PhotoController{}, "*:Delete")
+	beego.Router("/admin/photo/uploadphoto", &controllers.PhotoController{}, "*:UploadPhoto")
+
+	// 相册管理
+	beego.Router("/admin/album/add", &controllers.AlbumController{}, "*:Add")
+	beego.Router("/admin/album/list", &controllers.AlbumController{}, "*:List")
+	beego.Router("/admin/album/edit", &controllers.AlbumController{}, "*:Edit")
+	beego.Router("/admin/album/delete", &controllers.AlbumController{}, "*:Delete")
 
 }

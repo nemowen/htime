@@ -126,10 +126,10 @@ func (u *User) DisableUserCount() (int64, error) {
 // GetUsers method returns the user list
 func (u *User) GetUsers(offset int, size int) ([]*User, error) {
 	if size == 0 {
-		size = 10
+		size = MIN_PAGE_SIZE
 	}
-	if size > 50 {
-		size = 50
+	if size > MAX_PAGE_SIZE {
+		size = MAX_PAGE_SIZE
 	}
 	users := make([]*User, 0, size)
 	err := orm.Limit(size, offset).Desc("id").Find(&users)

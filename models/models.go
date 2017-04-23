@@ -24,6 +24,11 @@ import (
 	"github.com/go-xorm/xorm"
 )
 
+const (
+	MIN_PAGE_SIZE = 10  // 最小分页
+	MAX_PAGE_SIZE = 100 // 最大分页
+)
+
 var (
 	orm          *xorm.Engine
 	ErrParameter = errors.New("Parameter is wrong")
@@ -63,7 +68,7 @@ func InitDatabase() error {
 	orm.ShowErr = true //则会在控制台打印错误信息；
 
 	// regiest these models
-	err = orm.Sync(new(Topic), new(User), new(Category))
+	err = orm.Sync(new(Topic), new(User), new(Category), new(Photo), new(Album))
 	if err != nil {
 		panic(err)
 		return err

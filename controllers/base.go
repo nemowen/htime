@@ -16,10 +16,11 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego"
-	"github.com/nemowen/htime/models"
 	"strconv"
 	"strings"
+
+	"github.com/astaxie/beego"
+	"github.com/nemowen/htime/models"
 )
 
 const (
@@ -87,12 +88,12 @@ func (this *baseController) display(tpl ...string) {
 //权限验证
 func (this *baseController) checkPermission() {
 	if this.userid != 1 && this.controllerName == "user" {
-		this.showmsg("抱歉，只有超级管理员才能进行该操作！")
+		this.showMsg("抱歉，只有超级管理员才能进行该操作！")
 	}
 }
 
 //显示错误提示
-func (this *baseController) showmsg(msg ...string) {
+func (this *baseController) showMsg(msg ...string) {
 	if len(msg) == 1 {
 		msg = append(msg, this.Ctx.Request.Referer())
 	}

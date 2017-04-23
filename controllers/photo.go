@@ -17,32 +17,31 @@ package controllers
 
 import (
 	"fmt"
-	"github.com/jxufeliujj/blog/models"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/nemowen/htime/models"
 )
 
 type PhotoController struct {
 	baseController
 }
 
-//照片列表
+// 照片列表
 func (this *PhotoController) List() {
 	var albumid int64
-	var list []*models.Photo
 	var photo models.Photo
-
 	if albumid, _ = this.GetInt64("albumid"); albumid < 1 {
 		albumid = 1
 	}
-	photo.Query().Filter("albumid", albumid).OrderBy("-posttime").All(&list)
+	list, _ := photo.GetPhotos(1, models.MIN_PAGE_SIZE)
 	for _, v := range list {
 		v.Small = strings.Replace(v.Url, "bigpic", "smallpic", 1)
 	}
 	this.Data["list"] = list
 	this.Data["albumid"] = albumid
-	this.display()
+	this.display("photo_list")
 }
 
 //插入照片
@@ -53,7 +52,7 @@ func (this *PhotoController) Insert(albumid int64, desc, url string) {
 	photo.Posttime = time.Now()
 	photo.Url = url
 	if err := photo.Insert(); err != nil {
-		this.showmsg(err.Error())
+		this.showMsg(err.Error())
 	}
 }
 
